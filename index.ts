@@ -148,7 +148,6 @@ export const exportEvents: GCSPlugin['exportEvents'] = async (events, { global, 
                     gcFile.createWriteStream({
                         resumable: false,
                         validation: false,
-                        // metadata: { 'Cache-Control': 'public, max-age=31536000' },
                     })
                 )
                 .on('error', (error: Error) => {

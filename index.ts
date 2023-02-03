@@ -92,6 +92,12 @@ export const setupPlugin: GCSPlugin['setupPlugin'] = async ({ attachments, globa
     global.eventsToIgnore = new Set<string>((config.exportEventsToIgnore || '').split(',').map((event) => event.trim()))
 }
 
+export const getSettings: GCSPlugin['getSettings'] = (_) => {
+    return {
+        handlesLargeBatches: true
+    }
+}
+
 export const exportEvents: GCSPlugin['exportEvents'] = async (events, { global, config }) => {
     const rows = events.filter((event) => !global.eventsToIgnore.has(event.event.trim())).map(transformEventToRow)
     if (rows.length) {

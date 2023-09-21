@@ -92,15 +92,11 @@ export const setupPlugin: GCSPlugin['setupPlugin'] = async ({ attachments, globa
     global.eventsToIgnore = new Set<string>((config.exportEventsToIgnore || '').split(',').map((event) => event.trim()))
 }
 
-export const exportEvents: GCSPlugin['exportEvents'] = async (events, { global, config }) => {
-    const rows = events.filter((event) => !global.eventsToIgnore.has(event.event.trim())).map(transformEventToRow)
-    if (rows.length) {
-        console.info(
-            `Saving batch of ${rows.length} event${rows.length !== 1 ? 's' : ''} to GCS bucket ${config.bucketName}`
-        )
-    } else {
-        console.info(`Skipping an empty batch of events`)
+export const onEvent: GCSPlugin['exportEvents'] = async (event, { global, config }) => {
+    if (global.eventsToIgnore.has(event.event.trim())) {
+        return
     }
+    const rows = [transformEventToRow(event)]
 
     let csvString =
         'uuid,event,properties,elements,people_set,people_set_once,distinct_id,team_id,ip,site_url,timestamp\n'

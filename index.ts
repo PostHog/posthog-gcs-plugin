@@ -92,7 +92,7 @@ export const setupPlugin: GCSPlugin['setupPlugin'] = async ({ attachments, globa
     global.eventsToIgnore = new Set<string>((config.exportEventsToIgnore || '').split(',').map((event) => event.trim()))
 }
 
-export const onEvent: GCSPlugin['exportEvents'] = async (event, { global, config }) => {
+export const onEvent: GCSPlugin['onEvent'] = async (event, { global, config }) => {
     if (global.eventsToIgnore.has(event.event.trim())) {
         return
     }
